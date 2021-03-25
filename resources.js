@@ -111,7 +111,6 @@ export async function addItem(pk) {
   const oembed = `https://www.youtube.com/oembed?${params}`;
   const response = await fetch(oembed);
   const data = await response.json();
-  console.log(data);
   return updateItem(pk, {
     title: data.title,
     type: data.type,

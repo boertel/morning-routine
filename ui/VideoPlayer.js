@@ -1,7 +1,16 @@
 import { useState } from "react";
+import YouTube from "react-youtube";
+import { updateItem } from "resources";
 
-export default function Video({ src, thumbnail, ...props }) {
+export default function Video({ src, pk, thumbnail, ...props }) {
   const [showVideo, setShowVideo] = useState(false);
+
+  function onReady({ target }) {
+    updateItem(pk, {
+      duration: target.getDuration(),
+    });
+  }
+
   return (
     <div style={{ width: "100%" }}>
       {!showVideo && (
@@ -12,17 +21,7 @@ export default function Video({ src, thumbnail, ...props }) {
           onClick={() => setShowVideo(true)}
         />
       )}
-      {showVideo && (
-        <iframe
-          width="100%"
-          height={thumbnail.height}
-          src={src}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      )}
+      {showVideo && <YouTube videoId={pk} onReady={onReady} />}
     </div>
   );
 }
