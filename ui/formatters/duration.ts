@@ -12,9 +12,9 @@ export function duration(seconds) {
   durations.forEach((divisor, index) => {
     const quotient: number = Math.abs(parseInt(`${remainder / divisor}`, 10))
     remainder = Math.abs(remainder % divisor)
-    output.push(quotient)
+    output.push(Math.floor(quotient))
     if (index === durations.length - 1) {
-      output.push(remainder)
+      output.push(Math.floor(remainder))
     }
   })
   return output.reverse()
