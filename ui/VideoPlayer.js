@@ -19,10 +19,11 @@ export default function Video({ src, pk, thumbnail, ...props }) {
     <div className="w-full relative" style={{ height: thumbnail.height }}>
       <div
         className={cn(
-          "absolute object-cover w-full h-full transition-opacity bg-no-repeat bg-center bg-cover flex justify-center items-center",
+          "absolute object-cover w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center",
           {
             "opacity-0": isReady,
             "opacity-100": !isReady,
+            "pointer-events-none": isReady,
           }
         )}
         style={{ backgroundImage: `url(${thumbnail.src})`, height: thumbnail.height }}
@@ -36,7 +37,7 @@ export default function Video({ src, pk, thumbnail, ...props }) {
         <YouTube
           videoId={pk}
           onReady={onReady}
-          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1 } }}
+          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1, fullscreen: 1 } }}
         />
       )}
     </div>
