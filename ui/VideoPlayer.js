@@ -25,7 +25,7 @@ export default function Video({ src, pk, thumbnail, ...props }) {
             "opacity-100": !isReady,
           }
         )}
-        style={{ transform: "scale(1.035)", backgroundImage: `url(${thumbnail.src})`, height: thumbnail.height }}
+        style={{ backgroundImage: `url(${thumbnail.src})`, height: thumbnail.height }}
         onClick={() => setShowVideo(true)}
       >
         <div className="p-5 bg-gray-800 bg-opacity-60 rounded-lg">
