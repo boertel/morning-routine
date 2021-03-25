@@ -9,7 +9,10 @@ export default function AddURL({ ...props }) {
 
   const onKeyDown = (evt) => {
     if (evt.key === "Enter") {
-      const videoId = qs.parse(new URL(url).search, { ignoreQueryPrefix: true })["v"];
+      let videoId = url;
+      if (url.startsWith("http")) {
+        videoId = qs.parse(new URL(url).search, { ignoreQueryPrefix: true })["v"];
+      }
       setUrl("");
       addItem(videoId);
     }
