@@ -37,7 +37,7 @@ export default function Video({ src, pk, thumbnail, ...props }) {
         <YouTube
           videoId={pk}
           onReady={onReady}
-          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1, fullscreen: 1 } }}
+          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1 } }}
         />
       )}
     </div>
