@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const resources = [
   /*
@@ -75,7 +75,41 @@ const resources = [
 ];
 
 function fetcher() {
-  return Promise.resolve(JSON.parse(localStorage.getItem("items") || "[]"));
+  return Promise.resolve(JSON.parse(localStorage.getItem("items") || "{}"));
+}
+
+export function deleteItem(pk) {
+  mutate("items", async (items) => {
+    const data = { ...items };
+    delete data[pk];
+    localStorage.setItem("items", JSON.stringify(data));
+    return data;
+  });
+}
+
+export function updateItem(pk, values) {
+  return mutate("items", async (items) => {
+    const data = {
+      ...items,
+      [pk]: {
+        ...(items[pk] || {}),
+        ...values,
+      },
+    };
+    localStorage.setItem("items", JSON.stringify(data));
+    return data;
+  });
+}
+
+export function addItem(pk) {
+  return updateItem(pk, {
+    name: "",
+    type: "video",
+    duration: 0,
+    day: [],
+    src: `//www.youtube-nocookie.com/embed/${pk}`,
+    pk,
+  });
 }
 
 export function useItems() {

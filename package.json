@@ -9,12 +9,11 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "dayjs": "^1.10.4",
+    "formik": "^2.2.6",
     "next": "10.0.9",
     "qs": "^6.10.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "rrule": "^2.6.8",
     "swr": "^0.5.4"
   },
   "devDependencies": {
