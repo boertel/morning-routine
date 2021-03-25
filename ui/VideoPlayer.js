@@ -4,7 +4,7 @@ import YouTube from "react-youtube";
 import { updateItem } from "resources";
 import { PlayIcon } from "ui/icons";
 
-export default function Video({ src, pk, thumbnail, ...props }) {
+export default function Video({ src, pk, thumbnail, opacity = 40, ...props }) {
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -19,10 +19,10 @@ export default function Video({ src, pk, thumbnail, ...props }) {
     <div className="w-full relative" style={{ height: thumbnail.height }}>
       <div
         className={cn(
-          "absolute object-cover w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center",
+          "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
           {
             "opacity-0": isReady,
-            "opacity-100": !isReady,
+            [`opacity-${opacity}`]: !isReady,
             "pointer-events-none": isReady,
           }
         )}
