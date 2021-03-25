@@ -15,7 +15,7 @@ export default function Video({ src, pk, thumbnail, ...props }) {
   }
 
   return (
-    <div className="w-full relative" style={{ height: thumbnail.height }}>
+    <div className="w-full relative overflow-hidden" style={{ height: thumbnail.height }}>
       <img
         src={thumbnail.src}
         height={thumbnail.height}
