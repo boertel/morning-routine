@@ -12,7 +12,7 @@ export default function Time({ className, ...props }) {
 
   useInterval(() => {
     setTime(getTime());
-  }, 60 * 1000);
+  }, 1000);
 
   return (
     <div className={className}>

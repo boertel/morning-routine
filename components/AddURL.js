@@ -1,8 +1,6 @@
 import { Input } from "ui";
-import { useRef } from "react";
 import qs from "qs";
 import { useState } from "react";
-import { mutate } from "swr";
 
 import { addItem } from "resources";
 

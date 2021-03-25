@@ -17,7 +17,7 @@ export default function Home() {
         </div>
         <ul className="mt-8 space-y-4 flex-grow">
           {Object.values(data)
-            .sort(({ day: a, name }, { day: z }) => {
+            .sort(({ day: a }, { day: z }) => {
               if (a.includes(today) && z.includes(today)) {
                 return 1;
               } else if (a.includes(today) || z.includes(today)) {

@@ -1,4 +1,5 @@
 import useSWR, { mutate } from "swr";
+import qs from "qs";
 
 const resources = [
   /*
@@ -89,10 +90,11 @@ export function deleteItem(pk) {
 
 export function updateItem(pk, values) {
   return mutate("items", async (items) => {
+    const previous = items[pk] || {};
     const data = {
       ...items,
       [pk]: {
-        ...(items[pk] || {}),
+        ...previous,
         ...values,
       },
     };
@@ -101,11 +103,24 @@ export function updateItem(pk, values) {
   });
 }
 
-export function addItem(pk) {
+export async function addItem(pk) {
+  const params = qs.stringify({
+    format: "json",
+    url: `https://www.youtube.com/watch?v=${pk}`,
+  });
+  const oembed = `https://www.youtube.com/oembed?${params}`;
+  const response = await fetch(oembed);
+  const data = await response.json();
+  console.log(data);
   return updateItem(pk, {
-    name: "",
-    type: "video",
+    title: data.title,
+    type: data.type,
     duration: 0,
+    thumbnail: {
+      src: data.thumbnail_url,
+      height: data.thumbnail_height,
+      width: data.thumbnail_width,
+    },
     day: [],
     src: `//www.youtube-nocookie.com/embed/${pk}`,
     pk,
