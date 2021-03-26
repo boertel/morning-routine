@@ -1,6 +1,6 @@
 import { VideoPlayer, Toggle } from "ui";
-import { useEffect } from "react";
 import cn from "classnames";
+import { useEffect } from "react";
 import { useFormik } from "formik";
 
 import { formatDuration } from "ui/formatters/duration";
@@ -27,6 +27,7 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
 
   useEffect(() => {
     if (JSON.stringify(initialValues) !== JSON.stringify(values)) {
+      values.day = values.day.map((d) => parseInt(d, 10)).sort((a, z) => a - z);
       updateItem(pk, values);
     }
   }, [values, updateItem, initialValues, pk]);
@@ -52,8 +53,8 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
               <ToggleInput
                 name="day"
                 onChange={handleChange}
-                value={`${index}`}
-                checked={values.day.includes(`${index}`)}
+                value={index}
+                checked={values.day.includes(index)}
                 key={weekday}
               >
                 {weekday}

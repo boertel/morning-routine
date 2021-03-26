@@ -6,7 +6,7 @@ import { useItems } from "resources";
 
 export default function Home() {
   const { data } = useItems();
-  const today = `${new Date().getDay() - 1}`;
+  const today = new Date().getDay() - 1;
   return (
     <>
       <PageTitle>Good Morning!</PageTitle>
@@ -17,14 +17,10 @@ export default function Home() {
         </div>
         <ul className="mt-8 space-y-12 flex-grow">
           {Object.values(data)
-            .sort(({ day: a }, { day: z }) => {
-              if (a.includes(today) && z.includes(today)) {
-                return 1;
-              } else if (a.includes(today) || z.includes(today)) {
-                return 1;
-              } else if (Array.isArray(a) && Array.isArray(z)) {
-                return a[0] - z[0];
-              }
+            .sort(({ day: a, title }, { day: z, title: titleZ }) => {
+              const firstA = a.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
+              const firstZ = z.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
+              return firstA - firstZ;
             })
             .map((item, index) => {
               if (index === 0) {
