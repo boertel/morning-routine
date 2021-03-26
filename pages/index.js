@@ -21,7 +21,7 @@ export default function Home() {
               if (a.includes(today) && z.includes(today)) {
                 return 1;
               } else if (a.includes(today) || z.includes(today)) {
-                return -1;
+                return 1;
               } else if (Array.isArray(a) && Array.isArray(z)) {
                 return a[0] - z[0];
               }
