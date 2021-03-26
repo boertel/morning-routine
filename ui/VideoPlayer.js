@@ -4,7 +4,7 @@ import YouTube from "react-youtube";
 import { updateItem } from "resources";
 import { PlayIcon } from "ui/icons";
 
-export default function Video({ src, pk, thumbnail, opacity = 40, ...props }) {
+export default function Video({ src, pk, thumbnail, ...props }) {
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -22,7 +22,6 @@ export default function Video({ src, pk, thumbnail, opacity = 40, ...props }) {
           "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
           {
             "opacity-0": isReady,
-            [`opacity-${opacity}`]: !isReady,
             "pointer-events-none": isReady,
           }
         )}

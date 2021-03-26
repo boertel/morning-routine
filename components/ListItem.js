@@ -16,7 +16,7 @@ const ToggleInput = (props) => {
   return <Toggle type="checkbox" {...props} />;
 };
 
-export default function ListItem({ pk, title, src, duration, day, className, thumbnail, opacity }) {
+export default function ListItem({ pk, title, src, duration, day, className, thumbnail }) {
   const initialValues = {
     day,
     title,
@@ -44,7 +44,7 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
           </button>
         </div>
         <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>
-        <VideoPlayer src={src} thumbnail={thumbnail} pk={pk} opacity={opacity} />
+        <VideoPlayer src={src} thumbnail={thumbnail} pk={pk} />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">Show this video on:</legend>
           <div className="grid grid-cols-7 gap-x-2">

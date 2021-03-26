@@ -34,7 +34,7 @@ export default function Home() {
                     className="flex flex-col justify-between"
                     key={item.src}
                   >
-                    <ListItem {...item} opacity={100} />
+                    <ListItem {...item} />
                     <h3 className="flex justify-center space-x-2">
                       <div>Scroll down to edit your list</div>
                       <div className="animate-bounce" style={{ animationIterationCount: 5 }}>
