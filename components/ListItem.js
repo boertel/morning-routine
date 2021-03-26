@@ -52,7 +52,16 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
             {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((weekday, index) => (
               <ToggleInput
                 name="day"
-                onChange={handleChange}
+                onChange={(evt) =>
+                  handleChange({
+                    target: {
+                      name: evt.target.name,
+                      checked: evt.target.checked,
+                      type: evt.target.type,
+                      value: parseInt(evt.target.value, 10),
+                    },
+                  })
+                }
                 value={index}
                 checked={values.day.includes(index)}
                 key={weekday}

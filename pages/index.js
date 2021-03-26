@@ -15,7 +15,7 @@ export default function Home() {
           <h1 className="font-extrabold text-6xl text-primary">Morning Routine</h1>
           <Time className="text-gray-500 font-light" />
         </div>
-        <ul className="mt-8 space-y-12 flex-grow">
+        <ul className="mt-8 space-y-12 flex-grow w-full">
           {Object.values(data)
             .sort(({ day: a }, { day: z }) => {
               if (Array.isArray(a) && Array.isArray(z)) {
