@@ -77,10 +77,6 @@ const resources = [
 
 function fetcher() {
   const items = JSON.parse(localStorage.getItem("items") || "{}");
-  for (const key in items) {
-    items[key].day = items[key].day.map((d) => parseInt(d, 10));
-  }
-  localStorage.setItems("items", JSON.stringify(items));
   return Promise.resolve(items);
 }
 

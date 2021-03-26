@@ -17,10 +17,14 @@ export default function Home() {
         </div>
         <ul className="mt-8 space-y-12 flex-grow">
           {Object.values(data)
-            .sort(({ day: a, title }, { day: z, title: titleZ }) => {
-              const firstA = a.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
-              const firstZ = z.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
-              return firstA - firstZ;
+            .sort(({ day: a }, { day: z }) => {
+              if (Array.isArray(a) && Array.isArray(z)) {
+                const firstA = a.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
+                const firstZ = z.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
+                return firstA - firstZ;
+              } else {
+                return -1;
+              }
             })
             .map((item, index) => {
               if (index === 0) {
