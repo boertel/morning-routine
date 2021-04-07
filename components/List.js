@@ -3,6 +3,31 @@ import AddURL from "components/AddURL";
 import Footer from "components/Footer";
 import ListItem from "components/ListItem";
 
+const Strikethrough = (props) => {
+  const hours = new Date().getHours();
+  return (
+    <>
+      <span {...props} />
+      <style jsx>{`
+        span {
+          position: relative;
+        }
+        span:before {
+          content: "";
+          display: ${hours >= 12 ? "block" : "none"};
+          position: absolute;
+          top: 50%;
+          margin-top: 2px;
+          left: -6px;
+          right: -6px;
+          height: 4px;
+          background-color: red;
+        }
+      `}</style>
+    </>
+  );
+};
+
 export default function List({ data, canEdit = true }) {
   const today = new Date().getDay() - 1;
   return (
@@ -10,7 +35,9 @@ export default function List({ data, canEdit = true }) {
       <PageTitle>Good Morning!</PageTitle>
       <main className="max-w-prose mx-auto dark:bg-black px-4 min-h-screen flex flex-col">
         <div className="flex items-end justify-between mt-4 flex-wrap">
-          <h1 className="font-extrabold text-6xl text-primary">Morning Routine</h1>
+          <h1 className="font-extrabold text-6xl text-primary">
+            <Strikethrough>Morning</Strikethrough> Routine
+          </h1>
           <Time className="text-gray-500 font-light" />
         </div>
         <ul className="mt-8 space-y-12 flex-grow w-full">
