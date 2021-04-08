@@ -1,7 +1,14 @@
-import List from "components/List";
-import { useItems } from "resources";
+import { Container, PageTitle, Link } from "ui";
+import Header from "components/Header";
+import Footer from "components/Footer";
 
 export default function Home() {
-  const { data } = useItems();
-  return <List data={data} />;
+  return (
+    <Container>
+      <PageTitle>Good Morning!</PageTitle>
+      <Header />
+      <Link href="/auth/login">Log in</Link>
+      <Footer />
+    </Container>
+  );
 }

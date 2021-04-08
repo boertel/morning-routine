@@ -1,5 +1,6 @@
-import { Strikethrough, Time, PageTitle } from "ui";
+import { PageTitle, Container } from "ui";
 import AddURL from "components/AddURL";
+import Header from "components/Header";
 import Footer from "components/Footer";
 import ListItem from "components/ListItem";
 
@@ -8,13 +9,8 @@ export default function List({ data, canEdit = true }) {
   return (
     <>
       <PageTitle>Good Morning!</PageTitle>
-      <main className="max-w-prose mx-auto dark:bg-black px-4 min-h-screen flex flex-col">
-        <div className="flex items-end justify-between mt-4 flex-wrap">
-          <h1 className="font-extrabold text-6xl text-primary">
-            <Strikethrough>Morning</Strikethrough> Routine
-          </h1>
-          <Time className="text-gray-500 font-light" />
-        </div>
+      <Container>
+        <Header />
         <ul className="mt-8 space-y-12 flex-grow w-full">
           {Object.values(data)
             .sort(({ days: a }, { days: z }) => {
@@ -54,7 +50,7 @@ export default function List({ data, canEdit = true }) {
           )}
         </ul>
         <Footer />
-      </main>
+      </Container>
     </>
   );
 }

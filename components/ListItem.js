@@ -82,7 +82,11 @@ export default function ListItem({ id, title, src, duration, days, className, th
 
 const TitleInput = ({ className, ...props }) => {
   return (
-    <input className={cn("font-extrabold text-2xl bg-transparent", className)} placeholder="Enter title" {...props} />
+    <input
+      className={cn("font-extrabold text-2xl bg-transparent truncate", className)}
+      placeholder="Enter title"
+      {...props}
+    />
   );
 };
 

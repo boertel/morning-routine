@@ -16,7 +16,7 @@ export default function Strikethrough(props) {
           left: -6px;
           right: -6px;
           height: 4px;
-          background-color: red;
+          background-color: #ca0a0a;
         }
       `}</style>
     </>

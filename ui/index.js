@@ -1,4 +1,5 @@
 export { default as Checkbox } from "./Checkbox";
+export { default as Container } from "./Container";
 export { default as Link } from "./Link";
 export { default as Input } from "./Input";
 export { default as PageTitle } from "./PageTitle";
