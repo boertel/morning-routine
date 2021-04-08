@@ -1,14 +1,14 @@
 import { VideoPlayer, Toggle } from "ui";
 import cn from "classnames";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useFormik } from "formik";
 
 import { formatDuration } from "ui/formatters/duration";
 import { updateItem, deleteItem } from "resources";
 
-export default function ListItem({ pk, title, src, duration, day, className, thumbnail, canEdit }) {
+export default function ListItem({ id, title, src, duration, days, className, thumbnail, canEdit }) {
   const initialValues = {
-    day,
+    days,
     title,
   };
   const { handleChange, values } = useFormik({
@@ -18,11 +18,20 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
   useEffect(() => {
     if (canEdit) {
       if (JSON.stringify(initialValues) !== JSON.stringify(values)) {
-        values.day = values.day.map((d) => parseInt(d, 10)).sort((a, z) => a - z);
-        updateItem(pk, values);
+        values.days = values.days.sort((a, z) => a - z);
+        updateItem(id, values);
       }
     }
-  }, [canEdit, values, updateItem, initialValues, pk]);
+  }, [canEdit, updateItem, JSON.stringify(initialValues), JSON.stringify(values), id]);
+
+  const onReady = useCallback(
+    ({ target }) => {
+      updateItem(id, {
+        duration: target.getDuration(),
+      });
+    },
+    [id, updateItem]
+  );
 
   return (
     <div className={cn("py-3", className)}>
@@ -31,7 +40,7 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
           <TitleInput name="title" className="flex-grow" onChange={handleChange} value={values.title} />
           {canEdit && (
             <button
-              onClick={() => deleteItem(pk)}
+              onClick={() => deleteItem(id)}
               className="p-2 opacity-20 hover:opacity-100 transition-opacity leading-none"
             >
               &times;
@@ -39,25 +48,25 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
           )}
         </div>
         <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>
-        <VideoPlayer src={src} thumbnail={thumbnail} pk={pk} />
+        <VideoPlayer src={src} thumbnail={thumbnail} onReady={onReady} />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">{canEdit ? "Show this video on:" : "This video will show on:"}</legend>
           <div className="grid grid-cols-7 gap-x-2">
             {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((weekday, index) => (
               <ToggleInput
-                name="day"
-                onChange={(evt) =>
+                name="days"
+                onChange={(evt) => {
                   handleChange({
                     target: {
                       name: evt.target.name,
                       checked: evt.target.checked,
                       type: evt.target.type,
-                      value: parseInt(evt.target.value, 10),
+                      value: evt.target.value,
                     },
-                  })
-                }
+                  });
+                }}
                 value={index}
-                checked={values.day.includes(index)}
+                checked={values.days.includes(`${index}`)}
                 key={weekday}
                 disabled={!canEdit}
               >

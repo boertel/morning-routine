@@ -5,3 +5,4 @@ export { default as PageTitle } from "./PageTitle";
 export { default as Time } from "./Time";
 export { default as Toggle } from "./Toggle";
 export { default as VideoPlayer } from "./VideoPlayer";
+export { default as Strikethrough } from "./Strikethrough";

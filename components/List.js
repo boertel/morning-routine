@@ -1,32 +1,7 @@
-import { Time, PageTitle } from "ui";
+import { Strikethrough, Time, PageTitle } from "ui";
 import AddURL from "components/AddURL";
 import Footer from "components/Footer";
 import ListItem from "components/ListItem";
-
-const Strikethrough = (props) => {
-  const hours = new Date().getHours();
-  return (
-    <>
-      <span {...props} />
-      <style jsx>{`
-        span {
-          position: relative;
-        }
-        span:before {
-          content: "";
-          display: ${hours >= 12 ? "block" : "none"};
-          position: absolute;
-          top: 50%;
-          margin-top: 2px;
-          left: -6px;
-          right: -6px;
-          height: 4px;
-          background-color: red;
-        }
-      `}</style>
-    </>
-  );
-};
 
 export default function List({ data, canEdit = true }) {
   const today = new Date().getDay() - 1;
@@ -42,7 +17,7 @@ export default function List({ data, canEdit = true }) {
         </div>
         <ul className="mt-8 space-y-12 flex-grow w-full">
           {Object.values(data)
-            .sort(({ day: a }, { day: z }) => {
+            .sort(({ days: a }, { days: z }) => {
               if (Array.isArray(a) && Array.isArray(z)) {
                 const firstA = a.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
                 const firstZ = z.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];

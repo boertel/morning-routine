@@ -11,10 +11,38 @@ generator client {
 }
 
 model User {
-  id            String      @id @default(uuid())
-  name          String?
-  email         String?     @unique
-  createdAt     DateTime    @default(now()) @map(name: "created_at")
-  updatedAt     DateTime?    @updatedAt @map(name: "updated_at")
+  id        String    @id @default(uuid())
+  name      String?
+  email     String?   @unique
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime? @updatedAt @map(name: "updated_at")
+  entries   Entry[]
+
   @@map(name: "users")
+}
+
+model Entry {
+  id          String  @id @default(uuid())
+  title       String?
+  duration    Int?
+  src         String
+  provider    String?
+  kind        String?
+  days        Json
+  thumbnail   Media?
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@map(name: "entries")
+}
+
+model Media {
+  id     String  @id @default(uuid())
+  src    String
+  height Int?
+  width  Int?
+  entry   Entry?     @relation(fields: [entryId], references: [id])
+  entryId String?
+
+  @@map(name: "media")
 }

@@ -25,7 +25,7 @@ export default function Login() {
   const handleSubmit = async ({ email }) => {
     const response = await login({ email });
     if (response.ok) {
-      router.push("/dashboard");
+      router.push("/mine");
     }
   };
 

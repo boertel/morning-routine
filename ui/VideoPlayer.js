@@ -1,19 +1,18 @@
 import { useRef, useCallback, useEffect, useState } from "react";
+import qs from "qs";
 import cn from "classnames";
 import YouTube from "react-youtube";
-import { updateItem } from "resources";
 import { PlayIcon } from "ui/icons";
 
-export default function Video({ src, pk, thumbnail, ...props }) {
+export default function Video({ src, thumbnail, onReady, ...props }) {
+  const videoId = qs.parse(new URL(src).search, { ignoreQueryPrefix: true })["v"];
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  function onReady({ target }) {
+  function handleOnReady({ target }) {
     ref.current = target;
-    updateItem(pk, {
-      duration: target.getDuration(),
-    });
+    onReady && onReady({ target });
     setIsReady(true);
   }
 
@@ -63,8 +62,8 @@ export default function Video({ src, pk, thumbnail, ...props }) {
       </div>
       {showVideo && (
         <YouTube
-          videoId={pk}
-          onReady={onReady}
+          videoId={videoId}
+          onReady={handleOnReady}
           onEnd={onEnd}
           opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1 } }}
         />

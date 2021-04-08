@@ -1,63 +1,72 @@
 import useSWR, { mutate } from "swr";
 import qs from "qs";
-
-const resources = [];
-
-function fetcher() {
-  const items = JSON.parse(localStorage.getItem("items") || "{}");
-  return Promise.resolve(items);
-}
+import axios from "axios";
 
 export function deleteItem(pk) {
-  mutate("items", async (items) => {
-    const data = { ...items };
-    delete data[pk];
-    localStorage.setItem("items", JSON.stringify(data));
-    return data;
-  });
-}
-
-export function updateItem(pk, values) {
-  return mutate("items", async (items) => {
-    if (items) {
-      const previous = items[pk] || {};
-      const data = {
-        ...items,
-        [pk]: {
-          ...previous,
-          ...values,
-        },
-      };
-      localStorage.setItem("items", JSON.stringify(data));
+  axios.delete(`/api/entry/${pk}`);
+  mutate(
+    "/api/entry",
+    (items) => {
+      const data = { ...items };
+      delete data[pk];
       return data;
-    }
-  });
+    },
+    false
+  );
 }
 
-export async function addItem(pk) {
+const afterMutate = (pk, values) => async (items) => {
+  if (items) {
+    const previous = items[pk] || {};
+    const data = {
+      ...items,
+      [pk]: {
+        ...previous,
+        ...values,
+      },
+    };
+    return data;
+  }
+};
+
+export async function updateItem(pk, values) {
+  axios.put(`/api/entry/${pk}`, { ...values, id: pk });
+  return mutate("/api/entry", afterMutate(pk, values), false);
+}
+
+export async function addItem(videoId) {
+  const src = `https://www.youtube.com/watch?v=${videoId}`;
   const params = qs.stringify({
     format: "json",
-    url: `https://www.youtube.com/watch?v=${pk}`,
+    url: src,
   });
   const oembed = `https://www.youtube.com/oembed?${params}`;
-  const response = await fetch(oembed);
-  const data = await response.json();
-  return updateItem(pk, {
-    title: data.title,
-    type: data.type,
+  const { data: preview } = await axios.get(oembed);
+
+  const data = {
+    title: preview.title,
+    provider: "youtube",
+    kind: preview.type,
     duration: 0,
+    src,
     thumbnail: {
-      src: data.thumbnail_url,
-      height: data.thumbnail_height,
-      width: data.thumbnail_width,
+      src: preview.thumbnail_url,
+      height: preview.thumbnail_height,
+      width: preview.thumbnail_width,
     },
-    day: [],
-    src: `//www.youtube-nocookie.com/embed/${pk}`,
-    pk,
-  });
+    days: [],
+  };
+
+  const { data: entry } = await axios.post("/api/entry", data);
+  return mutate("/api/entry", afterMutate(entry.id, entry), false);
 }
 
-export function useItems() {
-  const { data = [], ...etc } = useSWR("items", fetcher);
+async function fetcher() {
+  const { data } = await axios.get("/api/entry");
+  return data;
+}
+
+export function useEntries(options) {
+  const { data = [], ...etc } = useSWR("/api/entry", fetcher, options);
   return { data, ...etc };
 }
