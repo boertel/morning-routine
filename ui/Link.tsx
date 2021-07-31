@@ -1,7 +1,7 @@
 import Link from "next/link";
 import cn from "classnames";
 
-export default function MyLink({ href, className, target, ...props }) {
+export default function MyLink({ href, className, target, ...props }: any) {
   let external = false;
   let _target = target;
   if (href.startsWith("http")) {

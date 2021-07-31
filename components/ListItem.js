@@ -1,14 +1,15 @@
+import { useEffect } from "react";
 import { VideoPlayer, Toggle } from "ui";
 import cn from "classnames";
-import { useEffect } from "react";
 import { useFormik } from "formik";
 
+import { updateEntry } from "resources/entry";
 import { formatDuration } from "ui/formatters/duration";
-import { updateItem, deleteItem } from "resources";
+import RRule from "rrule";
 
-export default function ListItem({ pk, title, src, duration, day, className, thumbnail, canEdit }) {
+export default function ListItem({ id, title, src, duration, rrule, className, thumbnail, canEdit }) {
   const initialValues = {
-    day,
+    byday: RRule.fromString(rrule).BYDAY || [],
     title,
   };
   const { handleChange, values } = useFormik({
@@ -16,54 +17,56 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
   });
 
   useEffect(() => {
-    if (canEdit) {
-      if (JSON.stringify(initialValues) !== JSON.stringify(values)) {
-        values.day = values.day.map((d) => parseInt(d, 10)).sort((a, z) => a - z);
-        updateItem(pk, values);
-      }
+    if (JSON.stringify(values) !== JSON.stringify(initialValues)) {
+      const { byday, ...valuesWithoutByDay } = values;
+      const rrule = new RRule({ FREQ: "DAILY", BYDAY: byday });
+      updateEntry(id, {
+        ...valuesWithoutByDay,
+        rrule: rrule.toString(),
+      });
     }
-  }, [canEdit, values, updateItem, initialValues, pk]);
+  }, [initialValues, values]);
 
   return (
     <div className={cn("py-3", className)}>
       <div className="flex flex-col">
-        <div className="flex items-center justify-between flex-wrap">
+        <div className="flex items-center justify-between">
           <TitleInput name="title" className="flex-grow" onChange={handleChange} value={values.title} />
           {canEdit && (
-            <button
-              onClick={() => deleteItem(pk)}
-              className="p-2 opacity-20 hover:opacity-100 transition-opacity leading-none"
-            >
-              &times;
-            </button>
+            <button className="p-2 opacity-20 hover:opacity-100 transition-opacity leading-none">&times;</button>
           )}
         </div>
         <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>
-        <VideoPlayer src={src} thumbnail={thumbnail} pk={pk} />
+        <VideoPlayer src={src} thumbnail={thumbnail} />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">{canEdit ? "Show this video on:" : "This video will show on:"}</legend>
           <div className="grid grid-cols-7 gap-x-2">
-            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((weekday, index) => (
-              <ToggleInput
-                name="day"
-                onChange={(evt) =>
-                  handleChange({
-                    target: {
-                      name: evt.target.name,
-                      checked: evt.target.checked,
-                      type: evt.target.type,
-                      value: parseInt(evt.target.value, 10),
-                    },
-                  })
-                }
-                value={index}
-                checked={values.day.includes(index)}
-                key={weekday}
-                disabled={!canEdit}
-              >
-                {weekday}
-              </ToggleInput>
-            ))}
+            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((weekday, index) => {
+              let parts = weekday.split("");
+              const twoLetters = weekday.substr(0, 2).toUpperCase();
+              return (
+                <ToggleInput
+                  name="byday"
+                  onChange={(evt) =>
+                    handleChange({
+                      target: {
+                        name: evt.target.name,
+                        checked: evt.target.checked,
+                        type: evt.target.type,
+                        value: twoLetters,
+                      },
+                    })
+                  }
+                  value={index}
+                  checked={values.byday.includes(twoLetters)}
+                  key={weekday}
+                  disabled={!canEdit}
+                >
+                  <div className="mb-2">{parts.splice(0, 3).join("")}</div>
+                  <div className="mb-2">{parts.join("")}</div>
+                </ToggleInput>
+              );
+            })}
           </div>
         </fieldset>
       </div>
@@ -73,7 +76,14 @@ export default function ListItem({ pk, title, src, duration, day, className, thu
 
 const TitleInput = ({ className, ...props }) => {
   return (
-    <input className={cn("font-extrabold text-2xl bg-transparent", className)} placeholder="Enter title" {...props} />
+    <input
+      className={cn(
+        "width-full font-extrabold text-2xl bg-transparent overflow-ellipsis overflow-hidden whitespace-nowrap rounded-md py-2 border-transparent focus:border-primary border-2",
+        className
+      )}
+      placeholder="Enter title"
+      {...props}
+    />
   );
 };
 

@@ -2,6 +2,7 @@ import { Time, PageTitle } from "ui";
 import AddURL from "components/AddURL";
 import Footer from "components/Footer";
 import ListItem from "components/ListItem";
+import RRule from "rrule";
 
 const Strikethrough = (props) => {
   const hours = new Date().getHours();
@@ -29,7 +30,12 @@ const Strikethrough = (props) => {
 };
 
 export default function List({ data, canEdit = true }) {
-  const today = new Date().getDay() - 1;
+  const sorted = Object.values(data).sort(({ rrule: first }, { rrule: second }) => {
+    const a = RRule.fromString(first).isValid();
+    const z = RRule.fromString(second).isValid();
+
+    return a === z ? 0 : a ? -1 : 1;
+  });
   return (
     <>
       <PageTitle>Good Morning!</PageTitle>
@@ -41,37 +47,23 @@ export default function List({ data, canEdit = true }) {
           <Time className="text-gray-500 font-light" />
         </div>
         <ul className="mt-8 space-y-12 flex-grow w-full">
-          {Object.values(data)
-            .sort(({ day: a }, { day: z }) => {
-              if (Array.isArray(a) && Array.isArray(z)) {
-                const firstA = a.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
-                const firstZ = z.map((v) => (v >= today ? v - today : v + (7 - today))).sort((a, z) => a - z)[0];
-                return firstA - firstZ;
-              } else {
-                return -1;
-              }
-            })
-            .map((item, index) => {
-              if (index === 0) {
-                return (
-                  <div
-                    style={{ height: "calc(100vh - 160px)" }}
-                    className="flex flex-col justify-between"
-                    key={item.src}
-                  >
-                    <ListItem {...item} canEdit={canEdit} />
-                    <h3 className="flex justify-center space-x-2">
-                      <div>{canEdit ? "Scroll down to edit your list" : "Scroll down to view more items"}</div>
-                      <div className="animate-bounce" style={{ animationIterationCount: 5 }}>
-                        ↓
-                      </div>
-                    </h3>
-                  </div>
-                );
-              } else {
-                return <ListItem key={item.src} {...item} canEdit={canEdit} />;
-              }
-            })}
+          {sorted.map((item, index) => {
+            if (index === 0) {
+              return (
+                <div style={{ height: "calc(100vh - 160px)" }} className="flex flex-col justify-between" key={item.src}>
+                  <ListItem {...item} canEdit={canEdit} />
+                  <h3 className="flex justify-center space-x-2">
+                    <div>{canEdit ? "Scroll down to edit your list" : "Scroll down to view more items"}</div>
+                    <div className="animate-bounce" style={{ animationIterationCount: 5 }}>
+                      ↓
+                    </div>
+                  </h3>
+                </div>
+              );
+            } else {
+              return <ListItem key={item.id} {...item} canEdit={canEdit} />;
+            }
+          })}
           {canEdit && (
             <div className="pt-16">
               <AddURL />

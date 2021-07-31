@@ -2,7 +2,11 @@ import cn from "classnames";
 
 export default function Toggle({ children, className, disabled, ...props }) {
   return (
-    <label className={cn("border-2 border-primary rounded text-xs", className, { "cursor-pointer": !disabled })}>
+    <label
+      className={cn("border-2 border-primary rounded text-xs hover:bg-primary hover:bg-opacity-30", className, {
+        "cursor-pointer": !disabled,
+      })}
+    >
       <style jsx>{`
         input[type="checkbox"]:checked ~ div {
           background-color: rgba(250, 165, 73, var(--tw-bg-opacity));
@@ -11,7 +15,9 @@ export default function Toggle({ children, className, disabled, ...props }) {
         }
       `}</style>
       <input type="checkbox" {...props} className="hidden" disabled={disabled} />
-      <div className="px-4 py-2 flex justify-center">{children}</div>
+      <div className="px-1 pt-2 flex justify-center flex-wrap overflow-hidden" style={{ height: "32px" }}>
+        {children}
+      </div>
     </label>
   );
 }

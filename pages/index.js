@@ -1,7 +1,11 @@
+import { useState, useEffect } from "react";
 import List from "components/List";
-import { useItems } from "resources";
+import { fetchEntries } from "resources/entry";
 
 export default function Home() {
-  const { data } = useItems();
-  return <List data={data} />;
+  const [entries, setEntries] = useState([]);
+  useEffect(async () => {
+    setEntries(await fetchEntries());
+  }, []);
+  return <List data={entries} />;
 }

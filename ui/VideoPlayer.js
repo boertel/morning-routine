@@ -1,19 +1,16 @@
 import { useRef, useCallback, useEffect, useState } from "react";
 import cn from "classnames";
 import YouTube from "react-youtube";
-import { updateItem } from "resources";
 import { PlayIcon } from "ui/icons";
 
-export default function Video({ src, pk, thumbnail, ...props }) {
+export default function Video({ src, thumbnail, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const videoId = src.split("/").at(-1);
 
   function onReady({ target }) {
     ref.current = target;
-    updateItem(pk, {
-      duration: target.getDuration(),
-    });
     setIsReady(true);
   }
 
@@ -45,7 +42,7 @@ export default function Video({ src, pk, thumbnail, ...props }) {
   }, []);
 
   return (
-    <div className="w-full relative" style={{ height: thumbnail.height }}>
+    <div className="w-full relative" style={{ maxHeight: thumbnail.height, aspectRatio: "16/9" }}>
       <div
         className={cn(
           "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
@@ -54,16 +51,16 @@ export default function Video({ src, pk, thumbnail, ...props }) {
             "pointer-events-none": isReady,
           }
         )}
-        style={{ backgroundImage: `url(${thumbnail.src})`, height: thumbnail.height }}
+        style={{ backgroundImage: `url(${thumbnail.src})` }}
         onClick={() => setShowVideo(true)}
       >
-        <div className="p-5 bg-gray-800 bg-opacity-60 rounded-lg">
+        <div className="p-5 bg-gray-800 bg-opacity-60 rounded-lg transform duration-200 hover:scale-125">
           <PlayIcon />
         </div>
       </div>
       {showVideo && (
         <YouTube
-          videoId={pk}
+          videoId={videoId}
           onReady={onReady}
           onEnd={onEnd}
           opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1 } }}

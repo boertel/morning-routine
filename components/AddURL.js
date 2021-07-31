@@ -2,7 +2,7 @@ import { Input } from "ui";
 import qs from "qs";
 import { useState } from "react";
 
-import { addItem } from "resources";
+import { addEntry } from "resources/entry";
 
 export default function AddURL({ ...props }) {
   const [url, setUrl] = useState("");
@@ -14,7 +14,7 @@ export default function AddURL({ ...props }) {
         videoId = qs.parse(new URL(url).search, { ignoreQueryPrefix: true })["v"];
       }
       setUrl("");
-      addItem(videoId);
+      addEntry(videoId);
     }
   };
 
