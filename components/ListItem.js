@@ -12,6 +12,7 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
     byday: RRule.fromString(rrule).BYDAY || [],
     title,
   };
+
   const { handleChange, values } = useFormik({
     initialValues,
   });

@@ -3,9 +3,12 @@ import qs from "qs";
 import { useState } from "react";
 
 import { addEntry } from "resources/entry";
+import { useUser } from "resources/user";
 
 export default function AddURL({ ...props }) {
   const [url, setUrl] = useState("");
+  const { user } = useUser();
+  console.log(user);
 
   const onKeyDown = (evt) => {
     if (evt.key === "Enter") {
@@ -14,7 +17,7 @@ export default function AddURL({ ...props }) {
         videoId = qs.parse(new URL(url).search, { ignoreQueryPrefix: true })["v"];
       }
       setUrl("");
-      addEntry(videoId);
+      addEntry(videoId, user.id);
     }
   };
 

@@ -2,7 +2,7 @@ import qs from "qs";
 
 import supabase from "./supabase";
 
-export const addEntry = async (videoId: string) => {
+export const addEntry = async (videoId: string, profileId: string) => {
   const params = qs.stringify({
     format: "json",
     url: `https://www.youtube.com/watch?v=${videoId}`,
@@ -19,6 +19,7 @@ export const addEntry = async (videoId: string) => {
       width: json.thumbnail_width,
     },
     src: `//www.youtube-nocookie.com/embed/${videoId}`,
+    profile_id: profileId,
   });
   if (error) {
     throw error;
@@ -34,8 +35,8 @@ export const updateEntry = async (id: any, values: any) => {
   return data;
 };
 
-export const fetchEntries = async () => {
-  const { data, error } = await supabase.from("entry").select();
+export const fetchEntries = async (match: any) => {
+  const { data, error } = await supabase.from("entry").select().match(match);
   if (error) {
     throw error;
   }
