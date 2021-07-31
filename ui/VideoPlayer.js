@@ -3,7 +3,7 @@ import cn from "classnames";
 import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
 
-export default function Video({ src, thumbnail, ...props }) {
+export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -21,25 +21,37 @@ export default function Video({ src, thumbnail, ...props }) {
 
   const pauseOnSpace = useCallback(
     (evt) => {
-      if (ref.current) {
-        if (evt.key === " ") {
-          evt.preventDefault();
+      if (evt.key === " ") {
+        evt.preventDefault();
+        if (ref.current) {
           const playerState = ref.current.getPlayerState();
           if (playerState !== 2) {
             ref.current.pauseVideo();
           } else {
             ref.current.playVideo();
           }
+        } else if (selected) {
+          setShowVideo(true);
         }
       }
     },
-    [ref]
+    [ref, selected]
   );
+
+  useEffect(() => {
+    if (selected && ref.current) {
+      const playerState = ref.current.getPlayerState();
+      if (playerState !== 2) {
+        ref.current.pauseVideo();
+        setShowVideo(false);
+      }
+    }
+  }, [selected, ref, setShowVideo]);
 
   useEffect(() => {
     window.addEventListener("keydown", pauseOnSpace);
     return () => window.removeEventListener("keydown", pauseOnSpace);
-  }, []);
+  }, [pauseOnSpace]);
 
   return (
     <div className="w-full relative" style={{ maxHeight: thumbnail.height, aspectRatio: "16/9" }}>

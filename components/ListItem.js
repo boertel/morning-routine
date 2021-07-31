@@ -57,7 +57,7 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
           )}
         </div>
         <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>
-        <VideoPlayer src={src} thumbnail={thumbnail} />
+        <VideoPlayer src={src} thumbnail={thumbnail} selected={selected} />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">{canEdit ? "Show this video on:" : "This video will show on:"}</legend>
           <div className="grid grid-cols-7 gap-x-2">
