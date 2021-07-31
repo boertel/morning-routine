@@ -8,7 +8,6 @@ import { useUser } from "resources/user";
 export default function AddURL({ ...props }) {
   const [url, setUrl] = useState("");
   const { user } = useUser();
-  console.log(user);
 
   const onKeyDown = (evt) => {
     if (evt.key === "Enter") {

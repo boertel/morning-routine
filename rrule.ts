@@ -1,4 +1,4 @@
-enum WEEKDAY {
+export enum WEEKDAY {
   SU = 0,
   MO = 1,
   TU = 2,
@@ -54,7 +54,7 @@ RRule.fromString = function (str) {
   str.split(";").forEach((part) => {
     if (part.length > 0) {
       const [key, value] = part.split("=");
-      parts[key] = value.split(",");
+      parts[key] = value.split(",").filter((v) => v);
     }
   });
   return new RRule(parts);

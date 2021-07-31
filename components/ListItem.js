@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { VideoPlayer, Toggle } from "ui";
 import cn from "classnames";
 import { useFormik } from "formik";
 
-import { updateEntry } from "resources/entry";
+import { useUser } from "resources/user";
+import { updateEntry, deleteEntry } from "resources/entry";
 import { formatDuration } from "ui/formatters/duration";
 import RRule from "rrule";
 
-export default function ListItem({ id, title, src, duration, rrule, className, thumbnail, canEdit }) {
+export default function ListItem({ id, title, src, duration, rrule, className, thumbnail, canEdit, selected }) {
   const initialValues = {
     byday: RRule.fromString(rrule).BYDAY || [],
     title,
@@ -16,6 +17,8 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
   const { handleChange, values } = useFormik({
     initialValues,
   });
+
+  const { user } = useUser();
 
   useEffect(() => {
     if (JSON.stringify(values) !== JSON.stringify(initialValues)) {
@@ -28,13 +31,29 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
     }
   }, [initialValues, values]);
 
+  const ref = useRef();
+  useEffect(() => {
+    if (selected) {
+      ref.current.scrollIntoView();
+    }
+  }, [selected]);
+
   return (
-    <div className={cn("py-3", className)}>
+    <div
+      className={cn("py-3 px-3 border-transparent border-2 rounded-sm", className, { "border-primary": selected })}
+      style={{ scrollMargin: "20px" }}
+      ref={ref}
+    >
       <div className="flex flex-col">
         <div className="flex items-center justify-between">
           <TitleInput name="title" className="flex-grow" onChange={handleChange} value={values.title} />
           {canEdit && (
-            <button className="p-2 opacity-20 hover:opacity-100 transition-opacity leading-none">&times;</button>
+            <button
+              className="p-2 opacity-20 hover:opacity-100 transition-opacity leading-none"
+              onClick={() => deleteEntry(id, user.id)}
+            >
+              &times;
+            </button>
           )}
         </div>
         <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>

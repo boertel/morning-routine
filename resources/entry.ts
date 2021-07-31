@@ -1,6 +1,22 @@
 import qs from "qs";
+import useSWR, { mutate } from "swr";
 
 import supabase from "./supabase";
+
+interface Thumbnail {
+  src: string;
+  height: number;
+  width: number;
+}
+
+interface Entry {
+  id: UUID;
+  duration: number;
+  title: string;
+  thumbnail: Thumbnail;
+  src: string;
+  profile_id: UUID;
+}
 
 export const addEntry = async (videoId: string, profileId: string) => {
   const params = qs.stringify({
@@ -24,21 +40,46 @@ export const addEntry = async (videoId: string, profileId: string) => {
   if (error) {
     throw error;
   }
-  return data;
+  return mutate(["entries", profileId], (entries: Entry[]) => {
+    return [...entries, data[0]];
+  });
 };
 
-export const updateEntry = async (id: any, values: any) => {
+export const updateEntry = async (id: UUID, values: any) => {
   const { data, error } = await supabase.from("entry").update(values).match({ id });
   if (error) {
     throw error;
   }
-  return data;
+  const first = data[0];
+  const profileId = first.profile_id;
+  return mutate(["entries", profileId], (entries: Entry[]) => {
+    return entries.map((entry: Entry) => {
+      if (entry.id === id) {
+        return first;
+      }
+      return entry;
+    });
+  });
 };
 
-export const fetchEntries = async (match: any) => {
-  const { data, error } = await supabase.from("entry").select().match(match);
+export const deleteEntry = async (id: UUID, profileId: UUID) => {
+  const { data, error } = await supabase.from("entry").delete().match({ id });
+  if (error) {
+    throw error;
+  }
+  return mutate(["entries", profileId], (entries: Entry[]) => {
+    return entries.filter((entry: Entry) => entry.id !== id);
+  });
+};
+
+async function fetcher(key: string, profileId: UUID) {
+  const { data, error } = await supabase.from("entry").select().match({ profile_id: profileId });
   if (error) {
     throw error;
   }
   return data;
+}
+
+export const useEntries = (profileId: UUID) => {
+  return useSWR(profileId ? ["entries", profileId] : null, fetcher);
 };
