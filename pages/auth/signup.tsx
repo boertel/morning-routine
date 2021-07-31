@@ -20,7 +20,6 @@ export default function Signup() {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       router.push("/");
     }

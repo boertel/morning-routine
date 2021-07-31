@@ -15,7 +15,6 @@ export default function Login() {
   };
 
   const handleSubmit = async (values: LoginValues) => {
-    console.log(values);
     await login(values);
   };
 
