@@ -4,7 +4,7 @@ import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
 import { useOnKeyDown } from "ui/hooks";
 
-export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
+export default function VideoPlayer({ src, thumbnail, selected, options = {}, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -24,6 +24,7 @@ export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
   const pauseOnSpace = useCallback(
     (evt) => {
       if (evt.key === " ") {
+        console.log("pause on space");
         evt.preventDefault();
         if (ref.current) {
           const playerState = ref.current.getPlayerState();
@@ -53,7 +54,7 @@ export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
   useOnKeyDown(pauseOnSpace);
 
   return (
-    <div className="w-full relative" style={{ maxHeight: thumbnail.height, aspectRatio: "16/9" }}>
+    <div className="w-full relative" style={{ maxHeight: thumbnail.height, minHeight: "332px" }}>
       <div
         className={cn(
           "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
@@ -74,7 +75,7 @@ export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
           videoId={videoId}
           onReady={onReady}
           onEnd={onEnd}
-          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1 } }}
+          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1, ...(options || {}) } }}
         />
       )}
     </div>

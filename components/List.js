@@ -51,7 +51,7 @@ export default function List({ data, canEdit = true }) {
         }
       })}
       {canEdit && (
-        <div className="pt-16">
+        <div className="pt-16 px-3">
           <AddURL />
         </div>
       )}
