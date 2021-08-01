@@ -4,16 +4,19 @@ import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
 import { useOnKeyDown } from "ui/hooks";
 
-export default function VideoPlayer({ src, thumbnail, selected, options = {}, ...props }) {
+export default function VideoPlayer({ src, thumbnail, selected, onReady, options = {}, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const parts = src.split("/");
   const videoId = parts[parts.length - 1];
 
-  function onReady({ target }) {
+  function handleOnReady({ target }) {
     ref.current = target;
     setIsReady(true);
+    if (onReady) {
+      onReady(target);
+    }
   }
 
   function onEnd() {
@@ -93,7 +96,7 @@ export default function VideoPlayer({ src, thumbnail, selected, options = {}, ..
       {showVideo && (
         <YouTube
           videoId={videoId}
-          onReady={onReady}
+          onReady={handleOnReady}
           onEnd={onEnd}
           opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1, ...(options || {}) } }}
         />
