@@ -2,6 +2,7 @@ import { useRef, useCallback, useEffect, useState } from "react";
 import cn from "classnames";
 import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
+import { useOnKeyDown } from "ui/hooks";
 
 export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
   const ref = useRef();
@@ -48,10 +49,7 @@ export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
     }
   }, [selected, ref, setShowVideo]);
 
-  useEffect(() => {
-    window.addEventListener("keydown", pauseOnSpace);
-    return () => window.removeEventListener("keydown", pauseOnSpace);
-  }, [pauseOnSpace]);
+  useOnKeyDown(pauseOnSpace);
 
   return (
     <div className="w-full relative" style={{ maxHeight: thumbnail.height, aspectRatio: "16/9" }}>

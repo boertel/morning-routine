@@ -4,6 +4,7 @@ import AddURL from "components/AddURL";
 import Footer from "components/Footer";
 import ListItem from "components/ListItem";
 import RRule, { WEEKDAY } from "rrule";
+import { useOnKeyDown } from "ui/hooks";
 
 export default function List({ data, canEdit = true }) {
   const sorted = Object.values(data).sort(({ rrule: first }, { rrule: second }) => {
@@ -30,10 +31,7 @@ export default function List({ data, canEdit = true }) {
     [sorted, setSelected]
   );
 
-  useEffect(() => {
-    window.addEventListener("keydown", keydown);
-    return () => window.removeEventListener("keydown", keydown);
-  }, []);
+  useOnKeyDown(keydown);
 
   return (
     <>

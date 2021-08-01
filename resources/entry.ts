@@ -72,7 +72,7 @@ export const deleteEntry = async (id: UUID, profileId: UUID) => {
   });
 };
 
-async function fetcher(key: string, profileId: UUID) {
+async function fetchByUserId(key: string, profileId: UUID) {
   const { data, error } = await supabase.from("entry").select().match({ profile_id: profileId });
   if (error) {
     throw error;
@@ -81,5 +81,16 @@ async function fetcher(key: string, profileId: UUID) {
 }
 
 export const useEntries = (profileId: UUID) => {
-  return useSWR(profileId ? ["entries", profileId] : null, fetcher);
+  return useSWR(profileId ? ["entries", profileId] : null, fetchByUserId);
+};
+
+async function fetchByUsername(key: string, username: string) {
+  const { data, error } = await supabase.from("profiles").select().match({ username });
+  if (error) {
+    throw error;
+  }
+  return fetchByUserId(key, data[0].id);
+}
+export const useEntriesFromUsername = (username: string | undefined) => {
+  return useSWR(username ? ["entries", username] : null, fetchByUsername);
 };
