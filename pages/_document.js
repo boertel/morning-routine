@@ -11,7 +11,7 @@ class MyDocument extends Document {
       <Html className="dark">
         <Head />
         <body className="dark:bg-black dark:text-white">
-          <main className="max-w-prose mx-auto dark:bg-black px-4 min-h-screen flex flex-col">
+          <main className="max-w-prose mx-auto dark:bg-black min-h-screen flex flex-col">
             <Main />
           </main>
           <NextScript />
