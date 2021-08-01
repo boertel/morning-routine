@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { Formik, Field, Form } from "formik";
 
 import { useUser, LoginValues } from "resources/user";
-import { Input } from "ui";
+import { Header, Input } from "ui";
 
 export default function Login() {
   const router = useRouter();
@@ -19,21 +20,35 @@ export default function Login() {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       router.push("/");
     }
   }, [user]);
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {() => (
-        <Form>
-          <Input as={Field} name="email" placeholder="email" type="email" />
-          <Input as={Field} name="password" placeholder="password" type="password" />
-          <button type="submit">Login</button>
-        </Form>
-      )}
-    </Formik>
+    <>
+      <Header />
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {() => (
+          <Form>
+            <div>
+              <label>Email Address</label>
+              <Input as={Field} name="email" placeholder="email" type="email" />
+            </div>
+            <div>
+              <label>Password</label>
+              <Input as={Field} name="password" placeholder="password" type="password" />
+            </div>
+            <button type="submit">Login</button>
+            <Link href="/auth/forgot">
+              <a>Forgot password</a>
+            </Link>
+            <Link href="/auth/signup">
+              <a>Create an account</a>
+            </Link>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 }
