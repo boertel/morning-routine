@@ -11,8 +11,8 @@ export default function List({ data, canEdit = true }) {
     const a = RRule.fromString(first);
     const z = RRule.fromString(second);
 
-    const dayA = a.BYDAY.at(0);
-    const dayZ = z.BYDAY.at(0);
+    const dayA = a.BYDAY.length ? a.BYDAY[0] : undefined;
+    const dayZ = z.BYDAY.length ? z.BYDAY[0] : undefined;
     const diff = dayA === dayZ ? 0 : isNaN(dayA) ? 1 : isNaN(dayZ) ? -1 : WEEKDAY[dayA] - WEEKDAY[dayZ];
 
     return a.isValid() === z.isValid() ? diff : a.isValid() ? -1 : 1;

@@ -8,7 +8,8 @@ export default function VideoPlayer({ src, thumbnail, selected, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const videoId = src.split("/").at(-1);
+  const parts = src.split("/");
+  const videoId = parts[parts.length - 1];
 
   function onReady({ target }) {
     ref.current = target;
