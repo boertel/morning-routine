@@ -8,7 +8,18 @@ import { updateEntry, deleteEntry } from "resources/entry";
 import { formatDuration } from "ui/formatters/duration";
 import RRule from "rrule";
 
-export default function ListItem({ id, title, src, duration, rrule, className, thumbnail, canEdit, selected }) {
+export default function ListItem({
+  id,
+  title,
+  src,
+  duration,
+  rrule,
+  className,
+  thumbnail,
+  canEdit,
+  selected,
+  as: AsComponent = "div",
+}) {
   const initialValues = {
     byday: RRule.fromString(rrule).BYDAY || [],
     title,
@@ -39,7 +50,7 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
   }, [selected]);
 
   return (
-    <div
+    <AsComponent
       className={cn("py-3 px-3 border-transparent border-2 rounded-sm", className, { "border-primary": selected })}
       style={{ scrollMargin: "20px" }}
       ref={ref}
@@ -90,7 +101,7 @@ export default function ListItem({ id, title, src, duration, rrule, className, t
           </div>
         </fieldset>
       </div>
-    </div>
+    </AsComponent>
   );
 }
 

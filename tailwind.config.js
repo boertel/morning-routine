@@ -13,6 +13,9 @@ module.exports = {
           600: "rgba(179, 128, 35, var(--tw-bg-opacity))",
         },
         secondary: "rgba(186, 200, 211, var(--tw-bg-opacity))",
+        danger: {
+          DEFAULT: "rgba(224, 49 49, var(--tw-bg-opacity))",
+        },
       },
     },
   },

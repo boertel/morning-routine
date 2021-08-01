@@ -10,4 +10,5 @@ const Input = forwardRef(({ className, as: AsComponent = "input", ...props }: an
     />
   );
 });
+
 export default Input;

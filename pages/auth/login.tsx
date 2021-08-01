@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Formik, Field, Form } from "formik";
 
 import { useUser, LoginValues } from "resources/user";
-import { Header, Input } from "ui";
+import { Header, Input, PageTitle } from "ui";
 
 export default function Login() {
   const router = useRouter();
@@ -27,25 +27,33 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      <PageTitle>Login</PageTitle>
+      <Header className="mb-20" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {() => (
-          <Form>
-            <div>
+        {({ values }) => (
+          <Form className="space-y-5 max-w-sm mx-auto">
+            <div className="flex flex-col space-y-1">
               <label>Email Address</label>
-              <Input as={Field} name="email" placeholder="email" type="email" />
+              <Input as={Field} name="email" placeholder="email" type="email" autoFocus={true} />
             </div>
-            <div>
+            <div className="flex flex-col space-y-1">
               <label>Password</label>
               <Input as={Field} name="password" placeholder="password" type="password" />
             </div>
-            <button type="submit">Login</button>
-            <Link href="/auth/forgot">
-              <a>Forgot password</a>
-            </Link>
-            <Link href="/auth/signup">
-              <a>Create an account</a>
-            </Link>
+            <div className="flex flex-col items-center">
+              <button className="bg-primary py-2 w-full rounded-md mt-8" type="submit">
+                Login
+              </button>
+            </div>
+
+            <div className="flex flex-col justify-center items-center">
+              {/*<Link href={{ pathname: "/auth/forgot", state: { email: values.email } }}>
+                <a>Forgot password?</a>
+                </Link>*/}
+              <Link href="/auth/signup">
+                <a>Create an account</a>
+              </Link>
+            </div>
           </Form>
         )}
       </Formik>

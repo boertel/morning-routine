@@ -13,7 +13,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="mb-1 mt-10 py-2 border-gray-600 border-t text-xs text-gray-400 sticky bottom-0 bg-black print:absolute">
+    <footer className="mb-1 mt-10 py-2 mx-3 border-gray-600 border-t text-xs text-gray-400 sticky bottom-0 bg-black print:absolute">
       Built by <Link href="https://ben.oertel.fr">Benjamin Oertel</Link> {index !== null && sentences[index]}
     </footer>
   );

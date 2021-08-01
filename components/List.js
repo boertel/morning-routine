@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { PageTitle, Header } from "ui";
 import AddURL from "components/AddURL";
-import Footer from "components/Footer";
 import ListItem from "components/ListItem";
 import RRule, { WEEKDAY } from "rrule";
 import { useOnKeyDown } from "ui/hooks";
@@ -34,34 +32,29 @@ export default function List({ data, canEdit = true }) {
   useOnKeyDown(keydown);
 
   return (
-    <>
-      <PageTitle>Good Morning!</PageTitle>
-      <Header />
-      <ul className="mt-8 space-y-12 flex-grow w-full">
-        {sorted.map((item, index) => {
-          if (index === 0) {
-            return (
-              <div style={{ height: "calc(100vh - 160px)" }} className="flex flex-col justify-between" key={item.src}>
-                <ListItem key={item.id} {...item} canEdit={canEdit} selected={selected === index} />
-                <h3 className="flex justify-center space-x-2">
-                  <div>{canEdit ? "Scroll down to edit your list" : "Scroll down to view more items"}</div>
-                  <div className="animate-bounce" style={{ animationIterationCount: 5 }}>
-                    ↓
-                  </div>
-                </h3>
-              </div>
-            );
-          } else {
-            return <ListItem key={item.id} {...item} canEdit={canEdit} selected={selected === index} />;
-          }
-        })}
-        {canEdit && (
-          <div className="pt-16">
-            <AddURL />
-          </div>
-        )}
-      </ul>
-      <Footer />
-    </>
+    <ul className="mt-8 space-y-12 flex-grow w-full">
+      {sorted.map((item, index) => {
+        if (index === 0) {
+          return (
+            <li style={{ height: "calc(100vh - 160px)" }} className="flex flex-col justify-between" key={item.src}>
+              <ListItem key={item.id} {...item} canEdit={canEdit} selected={selected === index} />
+              <h3 className="flex justify-center space-x-2">
+                <div>{canEdit ? "Scroll down to edit your list" : "Scroll down to view more items"}</div>
+                <div className="animate-bounce" style={{ animationIterationCount: 5 }}>
+                  ↓
+                </div>
+              </h3>
+            </li>
+          );
+        } else {
+          return <ListItem as="li" key={item.id} {...item} canEdit={canEdit} selected={selected === index} />;
+        }
+      })}
+      {canEdit && (
+        <div className="pt-16">
+          <AddURL />
+        </div>
+      )}
+    </ul>
   );
 }

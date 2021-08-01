@@ -61,11 +61,12 @@ export const UserContextProvider = (props: any) => {
   const value = useMemo(
     () => ({
       user,
+      session,
       login: (values: LoginValues) => supabase.auth.signIn(values),
       signup,
       signout: () => supabase.auth.signOut(),
     }),
-    [user]
+    [user, session]
   );
 
   return <UserContext.Provider value={value} {...props} />;

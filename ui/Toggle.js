@@ -3,8 +3,8 @@ import cn from "classnames";
 export default function Toggle({ children, className, disabled, ...props }) {
   return (
     <label
-      className={cn("border-2 border-primary rounded text-xs hover:bg-primary hover:bg-opacity-30", className, {
-        "cursor-pointer": !disabled,
+      className={cn("border-2 border-primary rounded text-xs", className, {
+        "cursor-pointer hover:bg-primary hover:bg-opacity-30": !disabled,
       })}
     >
       <style jsx>{`

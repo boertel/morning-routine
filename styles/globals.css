@@ -1,12 +1,27 @@
-@import url('https://rsms.me/inter/inter.css');
-html { font-family: 'Inter', sans-serif; }
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
 @supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
+  html {
+    font-family: "Inter var", sans-serif;
+  }
 }
 
 @tailwind base;
 
 :root {
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 @tailwind components;

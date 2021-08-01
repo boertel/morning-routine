@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 
 import List from "components/List";
+import { Header, PageTitle, Footer } from "ui";
 import { useEntriesFromUsername } from "resources/entry";
 
 export default function Profile(props) {
@@ -10,5 +11,12 @@ export default function Profile(props) {
   if (data.length === 0) {
     return null;
   }
-  return <List data={data} canEdit={false} />;
+  return (
+    <>
+      <PageTitle>{query.username}</PageTitle>
+      <Header />
+      <List data={data} canEdit={false} />
+      <Footer />
+    </>
+  );
 }
