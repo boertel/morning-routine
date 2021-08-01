@@ -24,7 +24,6 @@ export default function VideoPlayer({ src, thumbnail, selected, options = {}, ..
   const pauseOnSpace = useCallback(
     (evt) => {
       if (evt.key === " ") {
-        console.log("pause on space");
         evt.preventDefault();
         if (ref.current) {
           const playerState = ref.current.getPlayerState();
@@ -53,8 +52,29 @@ export default function VideoPlayer({ src, thumbnail, selected, options = {}, ..
 
   useOnKeyDown(pauseOnSpace);
 
+  // to be remove when https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio#browser_compatibility supports Safari
+
+  const containerRef = useRef();
+  const [height, setHeight] = useState(0);
+  const onResize = useCallback(
+    debounce(() => {
+      if (containerRef?.current) {
+        const { width } = containerRef.current.getBoundingClientRect();
+        setHeight((width * 9) / 16);
+      }
+    }),
+    [containerRef, setHeight]
+  );
+
+  useEffect(() => {
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [onResize]);
+  // to be removed - END
+
   return (
-    <div className="w-full relative" style={{ maxHeight: thumbnail.height, minHeight: "332px" }}>
+    <div className="w-full relative" style={{ maxHeight: thumbnail.height, height }} ref={containerRef}>
       <div
         className={cn(
           "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
@@ -80,4 +100,14 @@ export default function VideoPlayer({ src, thumbnail, selected, options = {}, ..
       )}
     </div>
   );
+}
+
+function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
 }

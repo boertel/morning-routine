@@ -68,7 +68,7 @@ export default function ListItem({
             </button>
           )}
         </div>
-        <div className="text-yellow-200 mb-6">{formatDuration(duration)}</div>
+        <div className="text-yellow-200 mb-3">{formatDuration(duration)}</div>
         <VideoPlayer src={src} thumbnail={thumbnail} selected={selected} options={playerOptions} />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">{canEdit ? "Show this video on:" : "This video will show on:"}</legend>
@@ -110,9 +110,10 @@ const TitleInput = ({ className, ...props }) => {
   return (
     <input
       className={cn(
-        "width-full font-extrabold text-2xl bg-transparent overflow-ellipsis overflow-hidden whitespace-nowrap rounded-md py-2 border-transparent focus:border-primary border-2",
+        "width-full font-extrabold text-2xl bg-transparent overflow-ellipsis overflow-hidden whitespace-nowrap rounded-md py-2 border-transparent focus:border-primary border-2 focus:pl-2",
         className
       )}
+      style={{ transition: "padding 75ms ease-in-out" }}
       placeholder="Enter title"
       {...props}
     />

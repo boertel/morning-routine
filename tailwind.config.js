@@ -20,7 +20,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      padding: ["focus"],
+    },
   },
   plugins: [],
 };
