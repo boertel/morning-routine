@@ -98,7 +98,7 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
           videoId={videoId}
           onReady={handleOnReady}
           onEnd={onEnd}
-          opts={{ width: "100%", height: thumbnail.height, playerVars: { autoplay: 1, ...(options || {}) } }}
+          opts={{ width: "100%", height: minHeight, playerVars: { autoplay: 1, ...(options || {}) } }}
         />
       )}
     </div>
