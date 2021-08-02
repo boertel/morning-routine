@@ -32,7 +32,7 @@ export default function Signup() {
       <Header className="mb-20" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {() => (
-          <Form className="space-y-5 max-w-sm mx-auto">
+          <Form className="space-y-5 max-w-lg mx-auto">
             <div className="flex flex-col space-y-1">
               <label>Username</label>
               <Input as={Field} placeholder="Username" name="username" type="text" />

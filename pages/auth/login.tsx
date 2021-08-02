@@ -31,7 +31,7 @@ export default function Login() {
       <Header className="mb-20" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ values }) => (
-          <Form className="space-y-5 max-w-sm mx-auto">
+          <Form className="space-y-5 max-w-xl mx-auto">
             <div className="flex flex-col space-y-1">
               <label>Email Address</label>
               <Input as={Field} name="email" placeholder="email" type="email" autoFocus={true} />

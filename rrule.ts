@@ -23,7 +23,7 @@ class RRule {
     }
   }
 
-  isValid(now: any) {
+  isValid(now: Date | null) {
     now = now || new Date();
     const weekday: WEEKDAY = WEEKDAY[now.getDay() as WEEKDAY];
     return this.BYDAY.includes(weekday);
@@ -38,6 +38,16 @@ class RRule {
       }
     });
     return str;
+  }
+
+  getSortValue(now: Date | null): number {
+    if (this.isValid(now)) {
+      return -1;
+    } else if (this.BYDAY.length > 0) {
+      now = now || new Date();
+      return (WEEKDAY[this.BYDAY[0] as WEEKDAY] + 7) % 8;
+    }
+    return Infinity;
   }
 }
 

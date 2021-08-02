@@ -1,19 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import AddURL from "components/AddURL";
 import ListItem from "components/ListItem";
-import RRule, { WEEKDAY } from "rrule";
+import RRule from "rrule";
 import { useOnKeyDown } from "ui/hooks";
 
 export default function List({ data, canEdit = true }) {
   const sorted = Object.values(data).sort(({ rrule: first }, { rrule: second }) => {
     const a = RRule.fromString(first);
     const z = RRule.fromString(second);
-
-    const dayA = a.BYDAY.length ? a.BYDAY[0] : undefined;
-    const dayZ = z.BYDAY.length ? z.BYDAY[0] : undefined;
-    const diff = dayA === dayZ ? 0 : isNaN(dayA) ? 1 : isNaN(dayZ) ? -1 : WEEKDAY[dayA] - WEEKDAY[dayZ];
-
-    return a.isValid() === z.isValid() ? diff : a.isValid() ? -1 : 1;
+    return a.getSortValue() - z.getSortValue();
   });
 
   const [selected, setSelected] = useState(null);
