@@ -5,7 +5,10 @@ const Input = forwardRef(({ className, as: AsComponent = "input", ...props }: an
   return (
     <AsComponent
       ref={ref}
-      className={cn("p-2 rounded border-primary border-2 bg-transparent focus:border-primary-600", className)}
+      className={cn(
+        "p-2 rounded border-primary border-2 bg-transparent focus:border-primary-600 focus:outline-none",
+        className
+      )}
       {...props}
     />
   );
