@@ -10,7 +10,9 @@ html {
 
 @tailwind base;
 
-:root {
+/* remove firefox dotted border on focus */
+::-moz-focus-inner {
+  border: 0;
 }
 
 a:hover,

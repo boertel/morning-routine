@@ -6,6 +6,9 @@ module.exports = {
     fontFamily: {
       sans: ["Inter var", "sans-serif"],
     },
+    ringColor: {
+      primary: "rgba(250, 165, 73, var(--tw-ring-opacity))",
+    },
     extend: {
       colors: {
         primary: {

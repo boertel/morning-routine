@@ -35,9 +35,11 @@ const Strikethrough = (props) => {
   return (
     <div className="relative pr-1">
       <span {...props} />
-      <div className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center pt-2">
-        <Scribble />
-      </div>
+      {hours >= 12 && (
+        <div className="absolute top-0 bottom-0 right-0 left-0 flex items-center justify-center pt-2">
+          <Scribble />
+        </div>
+      )}
     </div>
   );
 };
