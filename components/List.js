@@ -1,16 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import AddURL from "components/AddURL";
 import ListItem from "components/ListItem";
-import RRule from "rrule";
 import { useOnKeyDown } from "ui/hooks";
 
 export default function List({ data, canEdit = true }) {
-  const sorted = Object.values(data).sort(({ rrule: first }, { rrule: second }) => {
-    const a = RRule.fromString(first);
-    const z = RRule.fromString(second);
-    return a.getSortValue() - z.getSortValue();
-  });
-
   const [selected, setSelected] = useState(null);
 
   const keydown = useCallback(
@@ -21,14 +14,14 @@ export default function List({ data, canEdit = true }) {
         setSelected((previous) => (previous === null || previous === 0 ? sorted.length - 1 : previous - 1));
       }
     },
-    [sorted, setSelected]
+    [data, setSelected]
   );
 
   useOnKeyDown(keydown);
 
   return (
     <ul className="mt-8 space-y-12 flex-grow w-full">
-      {sorted.map((item, index) => {
+      {data.map((item, index) => {
         if (index === 0) {
           return (
             <li style={{ height: "calc(100vh - 160px)" }} className="flex flex-col justify-between" key={item.src}>

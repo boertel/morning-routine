@@ -1,5 +1,4 @@
-import useInterval from "./hooks/useInterval";
-import { useState } from "react";
+import useStateOnInterval from "./hooks/useStateOnInterval";
 
 function getTime() {
   const now = new Date();
@@ -8,11 +7,7 @@ function getTime() {
 }
 
 export default function Time({ className, ...props }) {
-  const [time, setTime] = useState(getTime());
-
-  useInterval(() => {
-    setTime(getTime());
-  }, 1000);
+  const time = useStateOnInterval(getTime, 1000);
 
   return (
     <div className={className}>

@@ -1,5 +1,6 @@
 import qs from "qs";
 import useSWR, { mutate } from "swr";
+import RRule from "rrule";
 
 import supabase from "./supabase";
 
@@ -47,6 +48,7 @@ export const addEntry = async (videoId: string, profileId: string) => {
 
 export const updateEntry = async (id: UUID, values: any) => {
   const { data, error } = await supabase.from("entry").update(values).match({ id });
+  console.log("data");
   if (error) {
     throw error;
   }
@@ -77,7 +79,11 @@ async function fetchByUserId(key: string, profileId: UUID) {
   if (error) {
     throw error;
   }
-  return data;
+  return data.sort(({ rrule: first }, { rrule: second }) => {
+    const a = RRule.fromString(first);
+    const z = RRule.fromString(second);
+    return a.getSortValue() - z.getSortValue();
+  });
 }
 
 export const useEntries = (profileId: UUID) => {

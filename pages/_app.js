@@ -3,7 +3,7 @@ import { SWRConfig } from "swr";
 import { UserContextProvider } from "resources/user";
 
 const options = {
-  revalidateOnFocus: false,
+  revalidateOnFocus: true,
   shouldRetryOnError: false,
 };
 

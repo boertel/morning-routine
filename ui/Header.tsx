@@ -1,9 +1,10 @@
 import cn from "classnames";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Time from "./Time";
+import { useStateOnInterval } from "./hooks";
 
-export default function Header({ className }) {
+export default function Header({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-end justify-between mt-4 flex-wrap px-3", className)}>
       <Link href="/">
@@ -22,16 +23,8 @@ export default function Header({ className }) {
   );
 }
 
-function useOnMount(cb) {
-  const [state, setState] = useState();
-  useEffect(() => {
-    setState(cb);
-  }, []);
-  return state;
-}
-
 const Strikethrough = (props) => {
-  const hours = useOnMount(() => new Date().getHours());
+  const hours = useStateOnInterval<number>(() => new Date().getHours(), 10 * 1000);
   return (
     <div className="relative pr-1">
       <span {...props} />
