@@ -9,9 +9,9 @@ export default function List({ data, canEdit = true }) {
   const keydown = useCallback(
     (evt) => {
       if (evt.key === "j") {
-        setSelected((previous) => (previous === null || previous === sorted.length - 1 ? 0 : previous + 1));
+        setSelected((previous) => (previous === null || previous === data.length - 1 ? 0 : previous + 1));
       } else if (evt.key === "k") {
-        setSelected((previous) => (previous === null || previous === 0 ? sorted.length - 1 : previous - 1));
+        setSelected((previous) => (previous === null || previous === 0 ? data.length - 1 : previous - 1));
       }
     },
     [data, setSelected]
