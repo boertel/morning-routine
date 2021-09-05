@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Formik, Field, Form } from "formik";
 
 import { useUser, LoginValues } from "resources/user";
-import { Header, Input, PageTitle } from "ui";
+import { Header, Input, PageTitle, Loading } from "ui";
 
 export default function Login() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function Login() {
       <PageTitle>Login</PageTitle>
       <Header className="mb-20" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ values }) => (
+        {({ values, isSubmitting }) => (
           <Form className="space-y-5 max-w-xl mx-auto">
             <div className="flex flex-col space-y-1">
               <label>Email Address</label>
@@ -41,7 +41,12 @@ export default function Login() {
               <Input as={Field} name="password" placeholder="password" type="password" />
             </div>
             <div className="flex flex-col items-center">
-              <button className="bg-primary py-2 w-full rounded-md mt-8" type="submit">
+              <button
+                className="bg-primary p-2 w-full rounded-md mt-8 inline-flex items-center justify-center"
+                disabled={isSubmitting}
+                type="submit"
+              >
+                {isSubmitting && <Loading />}
                 Login
               </button>
             </div>

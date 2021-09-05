@@ -7,3 +7,4 @@ export { default as Time } from "./Time";
 export { default as Toggle } from "./Toggle";
 export { default as Footer } from "./Footer";
 export { default as VideoPlayer } from "./VideoPlayer";
+export { default as Loading } from "./Loading";
