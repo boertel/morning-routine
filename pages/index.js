@@ -32,7 +32,7 @@ function LoggedOutButtons() {
       <div>
         <Link href="/auth/signup">
           <a className="rounded py-2 px-4 text-primary border-primary border hover:bg-primary hover:bg-opacity-40 hover:no-underline">
-            Signup
+            Sign up
           </a>
         </Link>
       </div>
