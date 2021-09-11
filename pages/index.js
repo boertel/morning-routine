@@ -39,7 +39,7 @@ function LoggedOutButtons() {
       <div className="text-gray-400 flex flex-wrap justify-center">
         <div>Curious of what you are getting once signed up?&nbsp;</div>
         <Link href="/ben">
-          <a className="italic">Click here to see my feed</a>
+          <a className="italic underline">Click here to see my feed</a>
         </Link>
       </div>
     </div>
