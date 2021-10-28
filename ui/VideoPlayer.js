@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect, useState } from "react";
+import qs from "qs";
 import cn from "classnames";
 import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
@@ -8,8 +9,7 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const parts = src.split("/");
-  const videoId = parts[parts.length - 1];
+  const videoId = qs.parse(new URL(src).search, { ignoreQueryPrefix: true })["v"];
 
   function handleOnReady({ target }) {
     ref.current = target;
@@ -55,8 +55,7 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
 
   useOnKeyDown(pauseOnSpace);
 
-  // to be remove when https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio#browser_compatibility supports Safari
-
+  // TODO rely on `aspect-ratio` but also make sure there is no shift when pressing play
   const containerRef = useRef();
   const [minHeight, setMinHeight] = useState(0);
   const onResize = useCallback(

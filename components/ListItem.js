@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useMemo, useRef, useEffect, useCallback } from "react";
 import { VideoPlayer, Toggle } from "ui";
 import cn from "classnames";
 import { useFormik } from "formik";
@@ -21,10 +21,13 @@ export default function ListItem({
   playerOptions,
   as: AsComponent = "div",
 }) {
-  const initialValues = {
-    byday: RRule.fromString(rrule).BYDAY || [],
-    title,
-  };
+  const initialValues = useMemo(
+    () => ({
+      byday: RRule.fromString(rrule).BYDAY || [],
+      title,
+    }),
+    [title, rrule]
+  );
 
   const { handleChange, values, setFieldValue } = useFormik({
     initialValues,

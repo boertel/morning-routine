@@ -8,10 +8,10 @@ import { useUser } from "resources/user";
 import { useOnKeyDown } from "ui/hooks";
 
 export default function AddURL({ ...props }) {
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState<string>("");
   const { user } = useUser();
 
-  const ref = useRef();
+  const ref = useRef<HTMLInputElement>();
   useOnKeyDown(
     useCallback(
       (evt) => {
@@ -27,12 +27,8 @@ export default function AddURL({ ...props }) {
 
   const onKeyDown = (evt) => {
     if (evt.key === "Enter") {
-      let videoId = url;
-      if (url.startsWith("http")) {
-        videoId = qs.parse(new URL(url).search, { ignoreQueryPrefix: true })["v"];
-      }
+      addEntry(url, user.id);
       setUrl("");
-      addEntry(videoId, user.id);
     }
   };
 

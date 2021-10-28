@@ -43,16 +43,15 @@ export const UserContextProvider = (props: any) => {
 
   const signup = useCallback(async (values: SignupValues) => {
     const { username, ...valuesWithoutUsername } = values;
-    const { user, session, error } = await supabase.auth.signUp(valuesWithoutUsername);
+    const { user, session, error } = await supabase.auth.signUp(valuesWithoutUsername, {
+      data: {
+        username,
+      },
+    });
     if (error) {
       throw error;
     }
     if (user) {
-      await supabase.auth.update({
-        data: {
-          username,
-        },
-      });
       setUser(user);
       setSession(session);
     }

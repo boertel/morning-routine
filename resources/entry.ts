@@ -19,10 +19,12 @@ interface Entry {
   profile_id: UUID;
 }
 
-export const addEntry = async (videoId: string, profileId: string) => {
+export const addEntry = async (src: string, profileId: string) => {
+  const videoId = qs.parse(new URL(src).search, { ignoreQueryPrefix: true })["v"];
+  const url = `https://www.youtube.com/watch?v=${videoId}`;
   const params = qs.stringify({
     format: "json",
-    url: `https://www.youtube.com/watch?v=${videoId}`,
+    url,
   });
   const oembed = `https://www.youtube.com/oembed?${params}`;
   const response = await fetch(oembed);
@@ -35,7 +37,7 @@ export const addEntry = async (videoId: string, profileId: string) => {
       height: json.thumbnail_height,
       width: json.thumbnail_width,
     },
-    src: `//www.youtube-nocookie.com/embed/${videoId}`,
+    src,
     profile_id: profileId,
   });
   if (error) {
@@ -54,14 +56,18 @@ export const updateEntry = async (id: UUID, values: any) => {
   }
   const first = data[0];
   const profileId = first.profile_id;
-  return mutate(["entries", profileId], (entries: Entry[]) => {
-    return entries.map((entry: Entry) => {
-      if (entry.id === id) {
-        return first;
-      }
-      return entry;
-    });
-  });
+  return mutate(
+    ["entries", profileId],
+    (entries: Entry[]) => {
+      return entries.map((entry: Entry) => {
+        if (entry.id === id) {
+          return first;
+        }
+        return entry;
+      });
+    },
+    false
+  );
 };
 
 export const deleteEntry = async (id: UUID, profileId: UUID) => {
@@ -75,7 +81,7 @@ export const deleteEntry = async (id: UUID, profileId: UUID) => {
 };
 
 async function fetchByUserId(key: string, profileId: UUID) {
-  const { data, error } = await supabase.from("entry").select().match({ profile_id: profileId });
+  const { data, error } = await supabase.from("entry").select().match({ profile_id: profileId }).order("created_at");
   if (error) {
     throw error;
   }
@@ -91,7 +97,7 @@ export const useEntries = (profileId: UUID) => {
 };
 
 async function fetchByUsername(key: string, username: string) {
-  const { data, error } = await supabase.from("profiles").select().match({ username });
+  const { data, error } = await supabase.from("profile").select().match({ username });
   if (error) {
     throw error;
   }
