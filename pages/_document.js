@@ -9,7 +9,9 @@ class MyDocument extends Document {
   render() {
     return (
       <Html className="dark">
-        <Head />
+        <Head>
+          <link rel="icon" href="favicon.svg" />
+        </Head>
         <body className="dark:bg-black dark:text-white">
           <main className="max-w-prose mx-auto dark:bg-black min-h-screen flex flex-col">
             <Main />
