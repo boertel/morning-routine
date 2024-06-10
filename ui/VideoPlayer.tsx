@@ -5,7 +5,7 @@ import YouTube from "react-youtube";
 import { PlayIcon } from "ui/icons";
 import { useOnKeyDown } from "ui/hooks";
 
-export default function VideoPlayer({ src, thumbnail, selected, onReady, options = {}, ...props }) {
+export default function VideoPlayer({ src, thumbnail, selected, onReady, onEnd, onStart, options = {}, ...props }) {
   const ref = useRef();
   const [showVideo, setShowVideo] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -19,9 +19,21 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
     }
   }
 
-  function onEnd() {
+  const hasStarted = useRef<boolean>(false);
+
+  function handleOnPlay() {
+    if (onStart && hasStarted.current === false) {
+      onStart();
+      hasStarted.current = true;
+    }
+  }
+
+  function handleOnEnd() {
     setIsReady(false);
     setShowVideo(false);
+    if (onEnd) {
+      onEnd();
+    }
   }
 
   const pauseOnSpace = useCallback(
@@ -76,7 +88,11 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
   // to be removed - END
 
   return (
-    <div className="w-full relative" style={{ maxHeight: thumbnail.height, minHeight }} ref={containerRef}>
+    <div
+      className="w-full relative"
+      style={{ aspectRatio: "16 / 9", maxHeight: thumbnail.height, minHeight }}
+      ref={containerRef}
+    >
       <div
         className={cn(
           "absolute w-full h-full transition-opacity bg-no-repeat bg-center bg-cover cursor-pointer flex justify-center items-center hover:opacity-100 transition-opacity",
@@ -96,7 +112,8 @@ export default function VideoPlayer({ src, thumbnail, selected, onReady, options
         <YouTube
           videoId={videoId}
           onReady={handleOnReady}
-          onEnd={onEnd}
+          onPlay={handleOnPlay}
+          onEnd={handleOnEnd}
           opts={{ width: "100%", height: minHeight, playerVars: { autoplay: 1, ...(options || {}) } }}
         />
       )}

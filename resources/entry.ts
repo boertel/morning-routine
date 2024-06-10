@@ -70,6 +70,23 @@ export const updateEntry = async (id: UUID, values: any) => {
   );
 };
 
+export const upsertActivity = async (entryId: UUID, { startedAt, endedAt }: { startedAt?: Date; endedAt?: Date }) => {
+  const values: { entry_id: string; started_at?: Date; ended_at?: Date } = {
+    entry_id: entryId,
+  };
+  if (startedAt) {
+    values.started_at = startedAt;
+  }
+  if (endedAt) {
+    values.ended_at = endedAt;
+  }
+  const { data, error } = await supabase.from("activity").upsert(values);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
 export const deleteEntry = async (id: UUID, profileId: UUID) => {
   const { data, error } = await supabase.from("entry").delete().match({ id });
   if (error) {
@@ -104,5 +121,5 @@ async function fetchByUsername(key: string, username: string) {
   return fetchByUserId(key, data[0].id);
 }
 export const useEntriesFromUsername = (username: string | undefined) => {
-  return useSWR(username ? ["entries", username] : null, fetchByUsername);
+  return useSWR(username ? ["entries", username] : null, fetchByUsername, { revalidateOnFocus: false });
 };

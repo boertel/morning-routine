@@ -4,7 +4,7 @@ import cn from "classnames";
 import { useFormik } from "formik";
 
 import { useUser } from "resources/user";
-import { updateEntry, deleteEntry } from "resources/entry";
+import { updateEntry, deleteEntry, upsertActivity } from "resources/entry";
 import { formatDuration } from "ui/formatters/duration";
 import RRule from "rrule";
 
@@ -86,6 +86,12 @@ export default function ListItem({
           selected={selected}
           options={playerOptions}
           onReady={!duration && updateDuration}
+          onStart={() => {
+            //upsertActivity(id, { startedAt: new Date() })
+          }}
+          onEnd={() => {
+            //upsertActivity(id, { endedAt: new Date() })
+          }}
         />
         <fieldset className="mt-4 opacity-20 hover:opacity-100 transition-opacity duration-300">
           <legend className="mb-2">{canEdit ? "Show this video on:" : "This video will show on:"}</legend>
