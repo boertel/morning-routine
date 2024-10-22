@@ -11,10 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call Supabase API
+        shell: bash
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          #!/bin/bash
-          set -e
-          curl --fail -G '${SUPABASE_URL}/rest/v1/entry' -d "limit-1" -H "apiKey: ${SUPABASE_ANON_KEY}" -H "Authorization: Bearer ${SUPABASE_ANON_KEY}"
+          curl --fail -G "${SUPABASE_URL}/rest/v1/entry" -d "limit-1" -H "apiKey: ${SUPABASE_ANON_KEY}" -H "Authorization: Bearer ${SUPABASE_ANON_KEY}"
